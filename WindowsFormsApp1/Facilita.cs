@@ -1,291 +1,198 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.IE;
-using OpenQA.Selenium.Support.Extensions;
-using OpenQA.Selenium.Support.UI;
-using TestStack.Seleno.BrowserStack.Core.Actions;
-using TestStack.White.InputDevices;
+using TestStack.White.Factory;
 using TestStack.White.UIItems.Finders;
-using TestStack.White.UIItems.WindowItems;
-using TestStack.White.WebBrowser;
+using System.Runtime.InteropServices;
+using System.Windows.Automation;
+using WindowsFormsApp1.Utils;
+using System.Threading.Tasks;
+using Facilita;
+using System.Windows.Threading;
+
+//using Santander.Automation.TN3270Bot;
 
 namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-
+        public static string UserCICSText;
+		public static string PassCICSText;
+		public static string Contrato { get; set; }
+        private TestStack.White.UIItems.WindowItems.Window chamada3cx;
+        private TestStack.White.UIItems.WindowItems.Window discador;
+        private TestStack.White.UIItems.WindowItems.Window f2;
+   
 
 
         public Form1()
         {
             InitializeComponent();
+ 
+#if DEBUG       
+            txtUserRCB.Text = "FL47250";
+            txtPassRCB.Text = "BANCO@30";
+            txtUserCICS.Text = "x208430";
+            txtPassCICS.Text = "amor2525";
+            txtUserSISCOB.Text = "301";
+            txtPassSISCOB.Text = "flex2019";
+#endif
+            KillProcess("3CXPhone");
+            KillProcess("cobdesk");
+            WebDriverExtensions.KillChrome();
+            UserCICSText = txtUserCICS.Text;
+            PassCICSText = txtPassCICS.Text;
+
+            //WebServiceSiscob.CallWebService();
+
+            //Thread.Sleep(30000);
+
+          
+
         }
 
-        private void button1_Click(object sender, EventArgs e)
+		
+
+		private static Process getProcess(string process)
         {
+            Process[] process1 = Process.GetProcessesByName(process);
 
-
-            //Login RCB *****************************************************************************************************
-
-
-            try
+            if (process1.Count() > 0)
             {
-                if (!LoginRCB(txtCNPJRCB.Text, txtUserRCB.Text, txtPassRCB.Text))
-                {
-                    this.Enabled = true;
-                    return;
-                }
+                return process1[0];
             }
-            catch
+            else
             {
-                this.Enabled = true;
+                return null;
+            }
+
+        }
+
+        private static void KillProcess(string process)
+        {
+            Process[] process1 = Process.GetProcessesByName(process);
+
+            if (process1.Count() > 0)
+            {
+                process1[0].Kill();
+            }
+
+        }
+
+       
+
+        private async void button1_ClickAsync(object sender, EventArgs e)
+
+		{
+            if(String.IsNullOrEmpty(txtCNPJRCB.Text) || String.IsNullOrEmpty(txtUserRCB.Text)
+                || String.IsNullOrEmpty(txtPassRCB.Text) || String.IsNullOrEmpty(txtUserCICS.Text)
+                    || String.IsNullOrEmpty(txtPassCICS.Text) || String.IsNullOrEmpty(txtUserSISCOB.Text)
+                || String.IsNullOrEmpty(txtPassSISCOB.Text))
+            {
+
+                DialogResult result2 = MessageBox.Show(
+                "Usuario ou senha está incompleto!!",
+                "Facilita",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning
+                );
+
+
                 return;
             }
+            barraApp();
 
+            //WebServiceSiscob.CallWebService("95671555", "01", "Teste Robo");		
 
-            //Login CTA  *****************************************************************************************************
+            this.Hide();
 
+            //Tela registro para finalizar acordo ou cancelar
+            //Form1 f = Application.OpenForms["Form1"] as Form1;
+            //Form1 f = new Form1();
+           
+            //-----------------------------------------------------------------------------------------------------------
+            //TelaRegistro cons = new TelaRegistro(f.txtUserCICS.Text, f.txtPassCICS.Text, "TCPIP71.santanderbr.corp", 2023);
+            //-----------------------------------------------------------------------------------------------------------
+            //cons.Show();
+            //Thread.Sleep(1000);
+            //cons.Activate();
 
-           LoginCICS(txtUserCICS.Text, txtPassCICS.Text);
+            await Siscob.IniLogin();
 
-            //Login SISCOB  ************************************************************************************************* 
-
-            try
-            {
-                //Aplicação Receber Chamada para operador
-
-                Login3CX();
-
-                //Login SISCOBWhite
-
-                LoginSISCOBWhite(txtUserSISCOB.Text, txtPassSISCOB.Text);
-
-
-                {
-                  
-
-                    this.Enabled = true;
-                    return;
-                }
-                
-                
-            }
-            catch
-            {  
-                this.Enabled = true;
-                return;
-
-            }
-
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(3);
+            timer.Tick += timer_Tick;
+            timer.Start();
 
         }
 
+		 void timer_Tick(object sender, EventArgs e)
+		{
+			var app2 = TestStack.White.Application.Attach("cobdesk");
+			int timeout1 = 0;
+		
+				var windows1 = app2.GetWindows();
 
-        private static void Login3CX()
+				foreach (var wind1 in windows1)
+				{
+					if (wind1.Name.Contains("Chamada DISCADOR"))
+					{
+						var discador = wind1;
+                        //Identifica Ativo/Receptivo
+                        //var txtCpf = discador.Get<TestStack.White.UIItems.TextBox>(SearchCriteria.ByAutomationId("txtUserDefined14"));
+                        var txtsAtendimento = wind1.GetMultiple<TestStack.White.UIItems.TextBox>(SearchCriteria.ByControlType(ControlType.Edit));
+
+                        var fechar = discador.Get(SearchCriteria.ByText("Fechar"));
+						fechar.SetForeground();
+						fechar.Focus();
+						Thread.Sleep(100);
+						fechar.Click();
+						Thread.Sleep(1500);
+
+                    if (txtsAtendimento.Count() > 16)
+                    {
+                        //iniciar tela registro receptivo
+                        Siscob.TelaReg(true);
+
+                    }
+                    else
+                    {
+                        //iniciar tela registro ativo
+                        Siscob.TelaReg(false);
+                    }
+
+                    timeout1 = 10000;
+						break;
+					}
+
+				}
+				Console.WriteLine(timeout1++);
+				Thread.Sleep(1000);
+
+		
+
+
+		}
+
+		public void barraApp()
         {
-            Thread.Sleep(3000);
-            Process.Start(@"C:\Program Files\3CXPhone\3CXPhone.exe");
-            Thread.Sleep(7000);
-            SendKeys.SendWait("{ESC}");
-            Thread.Sleep(220);
-            SendKeys.SendWait("{LEFT}");
-            Thread.Sleep(220);
-            SendKeys.SendWait("{RIGHT}");
-            Thread.Sleep(220);
-            SendKeys.SendWait("{RIGHT}");
-            Thread.Sleep(220);
-            SendKeys.SendWait("{ENTER}");
-            Thread.Sleep(220);
-            SendKeys.SendWait("{ENTER}");
-            Thread.Sleep(220);
-            SendKeys.SendWait("(^){C} ");
-            Thread.Sleep(400);
-            SendKeys.SendWait("{ESC}");
-            Thread.Sleep(400);
-            SendKeys.SendWait("{ESC}");
+            
+            BarraAplicativos barraApp = new BarraAplicativos();
+            barraApp.Show();
+
         }
 
+        
 
-        private void LoginSISCOB(string User, string Pass)
+		private InitializeOption AndIndex(int v)
         {
-            Process.Start(@"C:\Program Files\CSLog\Cobranca2\startsiscob.exe");
-            Thread.Sleep(6000);
-            SendKeys.SendWait(User);
-            Thread.Sleep(100);
-            SendKeys.SendWait("{ENTER}");
-            Thread.Sleep(100);
-            SendKeys.SendWait(Pass);
-            Thread.Sleep(100);
-            SendKeys.SendWait("(^){ENTER} ");
-            Thread.Sleep(100);
-            SendKeys.SendWait("{ENTER}");
-            Thread.Sleep(100);
-            SendKeys.SendWait("(^){V} ");
-            Thread.Sleep(100);
-            SendKeys.SendWait("{BACKSPACE}");
-            Thread.Sleep(100);
-            SendKeys.SendWait("{ENTER}");
+            throw new NotImplementedException();
         }
 
-
-        private void LoginSISCOBWhite(string User, string Pass)
-        {
-
-
-            var appLauncher = TestStack.White.Application.Launch(@"C:\Program Files\CSLog\Cobranca2\startsiscob.exe");
-            while (Process.GetProcessesByName("cobdesk").Count() == 0)
-            {
-                Thread.Sleep(100);
-            }
-
-
-            var app2 = TestStack.White.Application.Attach("cobdesk");
-            var mainWindow = app2.GetWindow("Login CSLog");
-            // var dbg = TestStack.White.Debug.Details(mainWindow.AutomationElement);
-            //1443170 Senha
-            //459426 Login
-            var txtLogin = mainWindow.Get(SearchCriteria.ByClassName("TEditCob"));
-            txtLogin.SetValue(User);
-            var txtSenha = mainWindow.Get(SearchCriteria.ByClassName("TMaskEditCob"));
-            txtSenha.SetValue(Pass);
-            var btnEnter = mainWindow.Get(SearchCriteria.ByText("[Ctrl + Enter]"));
-            btnEnter.Click();
-
-            Thread.Sleep(500);
-            try
-            {
-                mainWindow.Get(SearchCriteria.ByClassName("TMaskEditCob"));
-                app2.Close();
-                MessageBox.Show("***********************    ERRO DE LOGIN !!!   ***********************");
-                
-                
-                this.Enabled = false;
-                return;
-
-
-            }
-            catch (Exception)
-            {
-                var ramalWindow = app2.GetWindow("Digite o seu Ramal:");
-                //var dbg1 = TestStack.White.Debug.Details(ramalWindow.AutomationElement);
-                var txtRamal = ramalWindow.Get(SearchCriteria.ByClassName("TEditCob"));
-                txtRamal.SetForeground();
-                txtRamal.Focus();
-                SendKeys.SendWait("(^){V}");
-                ramalWindow.Keyboard.PressSpecialKey(TestStack.White.WindowsAPI.KeyboardInput.SpecialKeys.RETURN);
-                this.Enabled = true;
-                return;
-
-            }
-
-        }
-
-
-
-        /// <summary>
-        /// Faz login no sistema RCB
-        /// </summary>
-        /// <param name="CNPJ"></param>
-        /// <param name="User"></param>
-        /// <param name="Pass"></param>
-        /// <returns>Retorna true em caso de login com sucesso</returns>
-        private bool LoginRCB(string CNPJ, string User, string Pass)
-        {
-
-            IWebDriver driver = new FirefoxDriver(@"c:\");
-            Thread.Sleep(800);
-            driver.Url = "https://negocios.santander.com.br/RcbWeb";
-            driver.Manage().Window.Maximize();
-            Thread.Sleep(700);
-
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
-            WebDriverWait wait5 = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-            WebDriverWait wait10 = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-
-
-            wait.Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.Id("_id35:_id48")));
-            driver.FindElement(By.Id("_id35:_id48")).SendKeys(CNPJ);
-
-            Thread.Sleep(800);
-            wait.Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.Id("_id35:_id52")));
-            driver.FindElement(By.Id("_id35:_id52")).SendKeys(User);
-
-            Thread.Sleep(800);
-            wait.Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.Name("_id35:_id56")));
-            driver.FindElement(By.Name("_id35:_id56")).SendKeys(Pass);
-            Thread.Sleep(400);
-            SendKeys.SendWait("{ENTER}");
-
-
-            try
-            {
-                wait10.Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.Name("_id70:_id95")));
-                IWebElement btconfirmar = driver.FindElement(By.Name("_id70:_id95"));
-                Thread.Sleep(500);
-                driver.Close();
-
-                MessageBox.Show("***********************    ERRO DE LOGIN !!!   ***********************");
-
-
-                Thread.Sleep(500);
-
-                return false;
-
-            }
-            catch (Exception)
-            {
-                wait5.Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.Id("mnu1:_id52")));
-                IWebElement acordos = driver.FindElement(By.Id("mnu1:_id52"));
-                acordos.Click();
-
-                wait5.Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.Id("mnu1:_id55")));
-                IWebElement inclusao = driver.FindElement(By.Id("mnu1:_id55"));
-                inclusao.Click();
-                Thread.Sleep(2000);
-                return true;
-
-            }
-        }
-        private void LoginCICS(string User, string Pass)
-        {
-            Thread.Sleep(3000);
-            Process.Start(@"C:\ProgramData\Microsoft\AppV\Client\Integration\163F9BEB-E7BC-4A83-8B8A-8A4C8C6CE32C\Root\VFS\ProgramFilesX86\IBM\Personal Communications\private\Terminal_Financeira.WS");
-            Thread.Sleep(8000);
-            SendKeys.SendWait("0cicabnpt");
-            Thread.Sleep(500);
-            SendKeys.SendWait("{ENTER}");
-            Thread.Sleep(1000);
-            SendKeys.SendWait(User);
-            Thread.Sleep(200);
-            SendKeys.SendWait("{ENTER}");
-            Thread.Sleep(1000);
-            SendKeys.SendWait(Pass);
-            Thread.Sleep(500);
-            SendKeys.SendWait("{ENTER}");
-            Thread.Sleep(200);
-            SendKeys.SendWait("{ENTER}");
-            Thread.Sleep(1000);
-            SendKeys.SendWait("ocal");
-            Thread.Sleep(200);
-            SendKeys.SendWait("{ENTER}");
-            Thread.Sleep(100);
-            SendKeys.SendWait("{TAB}");
-            Thread.Sleep(100);
-            SendKeys.SendWait("{TAB}");
-        }
 
         private void button2_Click_1(object sender, EventArgs e)
         {
@@ -307,8 +214,9 @@ namespace WindowsFormsApp1
         private void button4_Click(object sender, EventArgs e)
         {
 
-
-            Application.Exit();
+			Form1 f = Application.OpenForms["Form1"] as Form1;
+			f.Close();
+			//Application.Exit();
 
 
         }
@@ -341,7 +249,7 @@ namespace WindowsFormsApp1
 
         private void label4_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -351,8 +259,8 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
-        }
+			
+	}
 
         private void label8_Click(object sender, EventArgs e)
         {
@@ -408,7 +316,7 @@ namespace WindowsFormsApp1
 
         private void txtCNPJRCB_Validating(object sender, CancelEventArgs e)
         {
-            if (txtCNPJRCB.Text.Length != 14)
+            if (txtCNPJRCB.Text.Length >= 15)
             {
                 e.Cancel = true;
                 errorProvider1.SetError(txtCNPJRCB, "CNPJ Inválido");
@@ -429,7 +337,7 @@ namespace WindowsFormsApp1
 
         private void txtUserRCB_Validating(object sender, CancelEventArgs e)
         {
-            if (txtUserRCB.Text.Length != 7)
+            if (txtUserRCB.Text.Length >= 8)
             {
                 e.Cancel = true;
                 errorProvider1.SetError(txtUserRCB, "Usuário RCB Inválido");
@@ -449,7 +357,7 @@ namespace WindowsFormsApp1
         }
         private void txtPassRCB_Validating(object sender, CancelEventArgs e)
         {
-            if (txtPassRCB.Text.Length != 8)
+            if (txtPassRCB.Text.Length >= 9)
             {
                 e.Cancel = true;
                 errorProvider1.SetError(txtPassRCB, "Senha RCB Inválido");
@@ -477,10 +385,10 @@ namespace WindowsFormsApp1
             }
 
         }
-        
+
         private void txtUserSISCOB_Validating(object sender, CancelEventArgs e)
         {
-            if (txtUserSISCOB.Text.Length != 3)
+            if (txtUserSISCOB.Text.Length >= 4)
             {
                 e.Cancel = true;
                 errorProvider1.SetError(txtUserSISCOB, "Usuário SISCOB Inválido");
@@ -512,7 +420,7 @@ namespace WindowsFormsApp1
 
 
         }
-      
+
         private void txtPassSISCOB1_Validating(object sender, CancelEventArgs e)
         {
             if (txtPassSISCOB.Text.Length <= 5)
@@ -539,7 +447,7 @@ namespace WindowsFormsApp1
         }
         private void txtUserCICS_Validating(object sender, CancelEventArgs e)
         {
-            if (txtUserCICS.Text.Length != 7)
+            if (txtUserCICS.Text.Length >= 9)
             {
                 e.Cancel = true;
                 errorProvider1.SetError(txtUserCICS, "Usuário CICS Inválido");
@@ -561,7 +469,7 @@ namespace WindowsFormsApp1
         }
         private void txtPassCICS_Validating(object sender, CancelEventArgs e)
         {
-            if (txtPassCICS.Text.Length != 8)
+            if (txtPassCICS.Text.Length >= 9)
             {
                 e.Cancel = true;
                 errorProvider1.SetError(txtPassCICS, "Senha CICS Inválido");
@@ -595,8 +503,19 @@ namespace WindowsFormsApp1
         {
 
         }
+
+        internal void ToString(object text)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
     }
-}
+ }
 
 
 

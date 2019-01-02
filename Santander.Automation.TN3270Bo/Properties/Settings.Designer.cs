@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Facilita.Properties {
+namespace Santander.Automation.TN3270Lib.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,73 +25,73 @@ namespace Facilita.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool checkBox1 {
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Administrador\\Documents\\LogsBot")]
+        public string LogPath {
             get {
-                return ((bool)(this["checkBox1"]));
+                return ((string)(this["LogPath"]));
             }
             set {
-                this["checkBox1"] = value;
+                this["LogPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool checkBox2 {
+        [global::System.Configuration.DefaultSettingValueAttribute("TCPIP71.santanderbr.corp")]
+        public string Ip {
             get {
-                return ((bool)(this["checkBox2"]));
+                return ((string)(this["Ip"]));
             }
             set {
-                this["checkBox2"] = value;
+                this["Ip"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool checkBox3 {
+        [global::System.Configuration.DefaultSettingValueAttribute("2023")]
+        public int Porta {
             get {
-                return ((bool)(this["checkBox3"]));
+                return ((int)(this["Porta"]));
             }
             set {
-                this["checkBox3"] = value;
+                this["Porta"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool checkBox4 {
+        [global::System.Configuration.DefaultSettingValueAttribute("x210595")]
+        public string User {
             get {
-                return ((bool)(this["checkBox4"]));
+                return ((string)(this["User"]));
             }
             set {
-                this["checkBox4"] = value;
+                this["User"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool checkBox5 {
+        [global::System.Configuration.DefaultSettingValueAttribute("casa1010")]
+        public string Pass {
             get {
-                return ((bool)(this["checkBox5"]));
+                return ((string)(this["Pass"]));
             }
             set {
-                this["checkBox5"] = value;
+                this["Pass"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool checkBox6 {
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Administrador\\Documents\\LogsBot")]
+        public string LogError {
             get {
-                return ((bool)(this["checkBox6"]));
+                return ((string)(this["LogError"]));
             }
             set {
-                this["checkBox6"] = value;
+                this["LogError"] = value;
             }
         }
     }

@@ -1,0 +1,10 @@
+﻿<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:DWLibrary-CSLogService">
+  <soapenv:Header/>
+  <soapenv:Body>
+    <urn:buscaContratoPorCPFCNPJ soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+      <login xsi:type="xsd:string">informaredati</login>
+      <senha xsi:type="xsd:string">mari@018</senha>
+      <cpfcnpj xsi:type="xsd:string">225691892</cpfcnpj>
+    </urn:buscaContratoPorCPFCNPJ>
+  </soapenv:Body>
+</soapenv:Envelope>

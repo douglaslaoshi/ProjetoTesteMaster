@@ -1,0 +1,19 @@
+﻿<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:DWLibrary-CSLogService">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:insereHistorico soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <login xsi:type="xsd:string">informaredati</login>
+         <senha xsi:type="xsd:string">mare@018</senha>
+         <id_fornecedor xsi:type="xsd:int">0</id_fornecedor>
+         <id_contr xsi:type="xsd:int"></id_contr>
+         <id_funcionario xsi:type="xsd:int">0</id_funcionario>
+         <id_tel xsi:type="xsd:int">0</id_tel>
+         <telefone xsi:type="xsd:string">0</telefone>
+         <codigo_acionamento xsi:type="xsd:int"></codigo_acionamento>
+         <mensagem xsi:type="xsd:string"></mensagem>
+         <modo xsi:type="xsd:string">U</modo>
+         <motivo xsi:type="xsd:string">?</motivo>
+         <autorizacao xsi:type="xsd:string">?</autorizacao>
+      </urn:insereHistorico>
+   </soapenv:Body>
+</soapenv:Envelope>

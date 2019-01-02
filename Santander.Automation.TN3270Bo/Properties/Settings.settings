@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Santander.Automation.TN3270Bot.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="LogPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\Administrador\Documents\LogsBot</Value>
+    </Setting>
+    <Setting Name="Ip" Type="System.String" Scope="User">
+      <Value Profile="(Default)">TCPIP71.santanderbr.corp</Value>
+    </Setting>
+    <Setting Name="Porta" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2023</Value>
+    </Setting>
+    <Setting Name="User" Type="System.String" Scope="User">
+      <Value Profile="(Default)">x210595</Value>
+    </Setting>
+    <Setting Name="Pass" Type="System.String" Scope="User">
+      <Value Profile="(Default)">casa1010</Value>
+    </Setting>
+    <Setting Name="LogError" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\Administrador\Documents\LogsBot</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

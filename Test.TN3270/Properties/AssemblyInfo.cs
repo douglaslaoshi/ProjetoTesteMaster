@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // As informações gerais sobre um assembly são controladas por
 // conjunto de atributos. Altere estes valores de atributo para modificar as informações
 // associada a um assembly.
-[assembly: AssemblyTitle("Siscob")]
+[assembly: AssemblyTitle("Test.TN3270")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BANCO SANTANDER BRASIL")]
-[assembly: AssemblyProduct("Siscob")]
+[assembly: AssemblyProduct("Test.TN3270")]
 [assembly: AssemblyCopyright("Copyright © BANCO SANTANDER BRASIL 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // O GUID a seguir será destinado à ID de typelib se este projeto for exposto para COM
-[assembly: Guid("b04b44be-d70e-42ee-b0f1-5390170d11e5")]
+[assembly: Guid("fddfa6b2-b74d-4684-a804-15d5824f8aad")]
 
 // As informações da versão de um assembly consistem nos quatro valores a seguir:
 //

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B04B44BE-D70E-42EE-B0F1-5390170D11E5}</ProjectGuid>
+    <ProjectGuid>{FDDFA6B2-B74D-4684-A804-15D5824F8AAD}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Siscob</RootNamespace>
-    <AssemblyName>Siscob</AssemblyName>
+    <RootNamespace>Test.TN3270</RootNamespace>
+    <AssemblyName>Test.TN3270</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,40 +32,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.3.3.0\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="CodedUI.jQueryExtensions, Version=1.0.4.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CodedUI.jQueryExtensions.1.0.4.5\lib\net40\CodedUI.jQueryExtensions.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="TestAutomationEssentials.CodedUI, Version=1.3.6702.25584, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TestAutomationEssentials.CodedUI.1.3.6702.25584\lib\net45\TestAutomationEssentials.CodedUI.dll</HintPath>
-    </Reference>
-    <Reference Include="TestStack.White, Version=0.13.0.0, Culture=neutral, PublicKeyToken=2672efbf3e161801, processorArchitecture=MSIL">
-      <HintPath>..\packages\TestStack.White.0.13.3\lib\net40\TestStack.White.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Siscob.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WindowsFormsApp1\Santander.csproj">
-      <Project>{edc4b280-d845-447d-b80d-e309bd75afd5}</Project>
-      <Name>Santander</Name>
+    <ProjectReference Include="..\Santander.Automation.TN3270Bo\Santander.Automation.TN3270Lib.csproj">
+      <Project>{49047502-3efb-45fb-a5af-c2adedb19ca9}</Project>
+      <Name>Santander.Automation.TN3270Lib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
